@@ -22,7 +22,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "stdint.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -33,6 +33,10 @@
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
 
+uint32_t delay[2] = {200,500};
+uint8_t index=0;
+uint8_t ultimo_estado = 1;
+uint8_t estado_actual = 0;
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -94,10 +98,20 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_SET);
-	  HAL_Delay(200);
-	  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_5, GPIO_PIN_RESET);
-	  HAL_Delay(200);
+
+	   estado_actual = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_13); //detectamos si hay algun cambio
+
+	     if (ultimo_estado == 1 && estado_actual == 0)
+	     {
+	         index++;
+	         if (index >= 2) index = 0;
+	     }
+
+	     ultimo_estado = estado_actual; //hacemos memoria
+
+	     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_5);
+	     HAL_Delay(delay[index]);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
