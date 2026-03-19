@@ -4,7 +4,7 @@
 **/[Dd]ebug/
 **/[Rr]elease/
 **/build/
-**/*.launch
+
 # Archivos generados de compilación
 *.o
 *.d
