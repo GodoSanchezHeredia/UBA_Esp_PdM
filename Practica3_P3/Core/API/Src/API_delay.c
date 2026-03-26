@@ -12,13 +12,20 @@
 
 
 void delayInit( delay_t * delay, tick_t duration ){
+	// proteccion contra puntero nulo , y numero negativo
+	if (delay == NULL ||duration < 0 ) {
+		Error_Handler();
+	}
 	delay->running = false;
 	delay->duration = duration;
 	delay->startTime =0;
 }
 
 bool_t delayRead( delay_t * delay ){
-
+	// proteccion contra puntero nulo
+	if (delay == NULL  ) {
+		Error_Handler();
+	}
 	switch (delay->running) {
 		case true:
 			if (HAL_GetTick()-delay->startTime>=delay->duration) {
@@ -42,10 +49,17 @@ bool_t delayRead( delay_t * delay ){
 }
 
 void delayWrite( delay_t * delay, tick_t duration ){
+	// proteccion contra puntero nulo , y numero negativo
+	if (delay == NULL ||duration < 0 ) {
+		Error_Handler();
+	}
 	delay->duration = duration;
 }
 
 bool_t delayIsRunning(delay_t * delay){
-
+	// proteccion contra puntero nulo
+	if (delay == NULL  ) {
+		Error_Handler();
+	}
 	return delay->running;
 }
