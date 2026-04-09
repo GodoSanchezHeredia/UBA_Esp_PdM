@@ -1,26 +1,23 @@
-# UBA_Esp_PdM
-# Practica 3: Modularización P3
+# Implementación de MEF Anti-rebote (Debounce) - Punto 1
 
-Implementar un módulo de software para trabajar con retardos no bloqueantes a partir de las funciones creadas en la práctica 2.
+Este proyecto implementa una Máquina de Estados Finitos (MEF) para eliminar los rebotes mecánicos de un pulsador, asegurando una lectura limpia de las entradas digitales en un sistema embebido.
 
-## Punto 1
+##  Descripción
+La lógica se basa en cuatro estados principales que filtran las transiciones rápidas (ruido) del pulsador mediante un retardo no bloqueante de **40 ms**.
 
-Encapsular las funciones necesarias para usar retardos no bloqueantes en un archivo fuente API_delay.c con su correspondiente archivo de cabecera API_delay.h, y ubicar estos archivos en la carpeta API creada. `Core/API`:
+### Estados de la MEF
+- `BUTTON_UP`: Estado de reposo (botón sin presionar).
+- `BUTTON_FALLING`: Detecta la transición inicial (posible rebote).
+- `BUTTON_DOWN`: Estado estable de botón presionado.
+- `BUTTON_RAISING`: Detecta la liberación del botón (posible rebote).
 
-* **API_delay.h**: Definición de tipos de datos (`tick_t`, `bool_t`) y la estructura `delay_t`.
-* **API_delay.c**: Implementación .
+##  Funciones Implementadas
+- `debounceFSM_init()`: Inicializa la MEF en el estado `BUTTON_UP`.
+- `debounceFSM_update()`: Ejecuta la lógica de transición de estados y lectura de entradas. Se debe llamar periódicamente en el lazo principal.
+- `buttonPressed()`: Acción ejecutada al detectar una presión válida (Enciende el LED).
+- `buttonReleased()`: Acción ejecutada al detectar una liberación válida (Apaga el LED).
 
-### Componentes de la estructura `delay_t`
-- `startTime`: Almacena el tiempo de inicio del retardo.
-- `duration`: Duración del retardo en milisegundos.
-- `running`: Flag booleano que indica si el retardo está activo.
-
-## Funciones Principales
-
-1.  **`delayInit`**: Configura la duración del retardo e inicializa el estado en `false`.
-2.  **`delayRead`**: La función más crítica. Utiliza una máquina de estados para:
-    * Si el retardo no está ejecutándose, toma el tiempo actual y se activa.
-    * Si está ejecutándose, compara el tiempo actual con el de inicio para verificar si se cumplió el tiempo.
-3.  **`delayWrite`**: Permite actualizar la duración de un retardo ya existente.
-4.  **`delayIsRunning`**: Esta función debe devolver una copia del valor del campo running de la estructura delay_t
-
+##  Especificaciones Técnicas
+- **Tiempo de debounce:** 40 ms.
+- **Mecanismo:** Retardos no bloqueantes (API_delay).
+- **Entorno:** STM32 / ARM Cortex.
