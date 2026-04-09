@@ -79,7 +79,7 @@ void uartReceiveStringSize(uint8_t * pstring, uint16_t size){
         return;
     }
 
-    if(HAL_UART_Receive(&huart2, pstring, size, 0) != HAL_OK){
+    if(HAL_UART_Receive(&huart2, pstring, size, uartTimeout) != HAL_OK){
         return;
     }
 }
